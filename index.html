@@ -3,67 +3,225 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ManextApps</title>
-<meta name="description" content="ManextApps makes small, friendly Android apps and games: puzzles, platformers, kids learning apps and everyday tools.">
-<style>
-:root{--bg:#f7f6f2;--card:#ffffff;--text:#1d2330;--muted:#5d6575;--line:#e4e2db;--accent:#2f6bff}
-@media (prefers-color-scheme:dark){:root{--bg:#12151c;--card:#1b2029;--text:#eef1f6;--muted:#a3abb9;--line:#2a313d;--accent:#7ea3ff}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-main{max-width:860px;margin:0 auto;padding:48px 16px 64px}
-h1{font-size:2.2rem;margin:0 0 8px;letter-spacing:-.02em}
-.lead{color:var(--muted);margin:0 0 36px;font-size:1.1rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
-.app{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
-.app header{display:flex;gap:14px;align-items:center}
-.app img{width:64px;height:64px;border-radius:14px;flex:none}
-.app h2{font-size:1.05rem;margin:0;line-height:1.3}
-.app p{margin:0;color:var(--muted);font-size:.95rem;flex:1}
-.links{display:flex;gap:14px;font-size:.9rem}
-a{color:var(--accent);text-decoration:none}
-a:hover{text-decoration:underline}
-footer{margin-top:44px;color:var(--muted);font-size:.95rem}
-</style>
+<title>ManextApps: friendly apps and games for Android</title>
+<meta name="description" content="ManextApps is a small studio making friendly Android apps and games. They work offline, need no account and respect your privacy.">
+<meta name="theme-color" content="#3341e0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#2a35c4" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta property="og:title" content="ManextApps">
+<meta property="og:description" content="Friendly apps and games for Android. They work offline, need no account and respect your privacy.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://manextapps.github.io/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Heebo:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<a class="skip" href="#apps">Skip to the apps</a>
+
+<header class="hero">
+  <nav class="nav wrap" aria-label="Main">
+    <a class="nav-mark" href="./">ManextApps</a>
+    <ul>
+      <li><a href="#apps">Apps</a></li>
+      <li><a href="#watch">Watch</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero-body wrap">
+    <h1>ManextApps</h1>
+    <p class="hero-lede"><strong>Friendly apps and games for Android.</strong> They work offline, need no account and respect your privacy.</p>
+    <div class="hero-actions">
+      <a class="btn-sun" href="#apps">See the apps</a>
+      <a class="hero-mail" href="mailto:manextapps@gmail.com">manextapps@gmail.com</a>
+    </div>
+  </div>
+
+  <div class="shelf">
+    <div class="wrap"><ul>
+      <li style="--i:0"><a href="#crack-the-vault"><img src="assets/icon-crack-the-vault.webp" width="192" height="192" alt="Crack the Vault"></a></li>
+      <li style="--i:1"><a href="#bouncy-journey"><img src="assets/icon-bouncy-journey.webp" width="192" height="192" alt="Bouncy Journey"></a></li>
+      <li style="--i:2"><a href="#habitat"><img src="assets/icon-habitat.webp" width="192" height="192" alt="Habitat"></a></li>
+      <li style="--i:3"><a href="#decision-wheel"><img src="assets/icon-decision-wheel.webp" width="192" height="192" alt="Decision Wheel"></a></li>
+      <li style="--i:4"><a href="#animal-world"><img src="assets/icon-animal-world.webp" width="192" height="192" alt="Animal World"></a></li>
+      <li style="--i:5"><a href="#learn-money"><img src="assets/icon-learn-money.webp" width="192" height="192" alt="My Shop: Learn Money"></a></li>
+    </ul></div>
+  </div>
+</header>
+
 <main>
-<h1>ManextApps</h1>
-<p class="lead">We make small, friendly Android apps and games. No accounts, no clutter, and most of them work offline.</p>
+  <section class="section apps wrap" id="apps" aria-labelledby="apps-title">
+    <div class="section-head">
+      <h2 id="apps-title">Our apps</h2>
+      <p>Six apps on Google Play, all free to download.</p>
+    </div>
 
-<div class="grid">
-  <article class="app">
-    <header><img src="icon-crack-the-vault.png" alt=""><h2>Crack the Vault: Code Breaker</h2></header>
-    <p>A logic puzzle game. Read the number clues, find the secret code and open the vault. 500 levels plus a daily challenge.</p>
-    <div class="links"><a href="https://play.google.com/store/apps/details?id=com.crackthevault.game">Google Play</a><a href="crack-the-vault-privacy/">Privacy</a></div>
-  </article>
-  <article class="app">
-    <header><img src="icon-bouncy-journey.png" alt=""><h2>Bouncy Journey: Platformer</h2></header>
-    <p>Run and jump across floating islands with Fox, Wolf or Lizard. Ten levels, hidden coins and three stars to earn.</p>
-    <div class="links"><a href="https://play.google.com/store/apps/details?id=com.bouncyjourney.game">Google Play</a><a href="bouncy-journey-privacy/">Privacy</a></div>
-  </article>
-  <article class="app">
-    <header><img src="icon-habitat.png" alt=""><h2>Habitat: Water &amp; Habit Tracker</h2></header>
-    <p>Track water, meals, workouts and bedtime with four cozy animal friends. Simple, private and offline.</p>
-    <div class="links"><a href="https://play.google.com/store/apps/details?id=com.manextapps.habitat">Google Play</a><a href="habitat-privacy/">Privacy</a></div>
-  </article>
-  <article class="app">
-    <header><img src="icon-mayotze.png" alt=""><h2 dir="auto">מה יוצא? גלגל מזל והחלטות</h2></header>
-    <p>A Hebrew decision wheel. Can't decide what to eat or who goes first? Spin and let the wheel choose.</p>
-    <div class="links"><a href="https://play.google.com/store/apps/details?id=com.mayotze.app">Google Play</a><a href="mayotze-privacy/">Privacy</a></div>
-  </article>
-  <article class="app">
-    <header><img src="icon-animalworld.png" alt=""><h2 dir="auto">עולם החיות</h2></header>
-    <p>Animal World for young children in Hebrew. Meet animals, hear their sounds and play a gentle guessing game.</p>
-    <div class="links"><a href="https://play.google.com/store/apps/details?id=com.manextapps.animalworld">Google Play</a><a href="animalworld-privacy/">Privacy</a></div>
-  </article>
-  <article class="app">
-    <header><img src="icon-learnmoney.png" alt=""><h2 dir="auto">החנות שלי: לומדים כסף</h2></header>
-    <p>A shop game that teaches kids Israeli money: coins and notes, counting, paying and working out change.</p>
-    <div class="links"><a href="https://play.google.com/store/apps/details?id=com.manextapps.learnmoney">Google Play</a><a href="learnmoney-privacy/">Privacy</a></div>
-  </article>
-</div>
+    <div class="group games">
+      <div class="group-head">
+        <h3>Games</h3>
+        <p>Short levels for a spare five minutes or a long train ride.</p>
+      </div>
+      <div class="group-apps">
+        <article class="app" id="crack-the-vault">
+          <a class="app-art" href="https://play.google.com/store/apps/details?id=com.crackthevault.game" tabindex="-1" aria-hidden="true"><img src="assets/feature-crack-the-vault.webp" width="1024" height="500" alt="" loading="lazy"></a>
+          <div class="app-head">
+            <img class="app-icon" src="assets/icon-crack-the-vault.webp" width="192" height="192" alt="">
+            <div class="app-title"><h4>Crack the Vault: Code Breaker</h4></div>
+          </div>
+          <span class="tag">Logic puzzle</span>
+          <p class="app-pitch">Read the number clues, work out the secret code and open the vault. 500 levels to solve, plus a new daily challenge.</p>
+          <div class="app-links">
+            <a class="btn-play" href="https://play.google.com/store/apps/details?id=com.crackthevault.game">Get it on Google Play</a>
+            <a class="text-link" href="crack-the-vault-privacy/">Privacy policy</a>
+          </div>
+        </article>
 
-<footer>Questions or feedback: <a href="mailto:manextapps@gmail.com">manextapps@gmail.com</a></footer>
+        <article class="app" id="bouncy-journey">
+          <a class="app-art" href="https://play.google.com/store/apps/details?id=com.bouncyjourney.game" tabindex="-1" aria-hidden="true"><img src="assets/feature-bouncy-journey.webp" width="1024" height="500" alt="" loading="lazy"></a>
+          <div class="app-head">
+            <img class="app-icon" src="assets/icon-bouncy-journey.webp" width="192" height="192" alt="">
+            <div class="app-title"><h4>Bouncy Journey: Platformer</h4></div>
+          </div>
+          <span class="tag">Platformer</span>
+          <p class="app-pitch">Run and jump across floating islands as Fox, Wolf or Lizard. Ten levels with hidden coins and three stars to earn in each.</p>
+          <div class="app-links">
+            <a class="btn-play" href="https://play.google.com/store/apps/details?id=com.bouncyjourney.game">Get it on Google Play</a>
+            <a class="text-link" href="bouncy-journey-privacy/">Privacy policy</a>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group everyday">
+      <div class="group-head">
+        <h3>Everyday apps</h3>
+        <p>Small helpers for daily life, like drinking enough water or settling what's for dinner.</p>
+      </div>
+      <div class="group-apps">
+        <article class="app" id="habitat">
+          <a class="app-art" href="https://play.google.com/store/apps/details?id=com.manextapps.habitat" tabindex="-1" aria-hidden="true"><img src="assets/feature-habitat.webp" width="1024" height="500" alt="" loading="lazy"></a>
+          <div class="app-head">
+            <img class="app-icon" src="assets/icon-habitat.webp" width="192" height="192" alt="">
+            <div class="app-title"><h4>Habitat: Water &amp; Habit Tracker</h4></div>
+          </div>
+          <span class="tag">Health and habits</span>
+          <p class="app-pitch">Track water, meals, workouts and bedtime with four cozy animal friends. No ads, no sign up, and it never needs the internet.</p>
+          <div class="app-links">
+            <a class="btn-play" href="https://play.google.com/store/apps/details?id=com.manextapps.habitat">Get it on Google Play</a>
+            <a class="text-link" href="habitat-privacy/">Privacy policy</a>
+          </div>
+        </article>
+
+        <article class="app" id="decision-wheel">
+          <a class="app-art" href="https://play.google.com/store/apps/details?id=com.mayotze.app" tabindex="-1" aria-hidden="true"><img src="assets/feature-decision-wheel.webp" width="1024" height="500" alt="" loading="lazy"></a>
+          <div class="app-head">
+            <img class="app-icon" src="assets/icon-decision-wheel.webp" width="192" height="192" alt="">
+            <div class="app-title"><h4>Decision Wheel<span class="app-sub"><bdi dir="rtl" lang="he">מה יוצא?</bdi></span></h4></div>
+          </div>
+          <span class="tag">Decision maker</span>
+          <p class="app-pitch">Can't decide what to eat or who goes first? Pick a ready made wheel or build your own, spin, and let the wheel choose.</p>
+          <div class="app-links">
+            <a class="btn-play" href="https://play.google.com/store/apps/details?id=com.mayotze.app">Get it on Google Play</a>
+            <a class="text-link" href="mayotze-privacy/">Privacy policy</a>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="group kids">
+      <div class="group-head">
+        <h3>Kids and learning in Hebrew</h3>
+        <p>Gentle games for young Hebrew speakers, made to be calm, simple and safe to hand over.</p>
+      </div>
+      <div class="group-apps">
+        <article class="app" id="animal-world">
+          <a class="app-art" href="https://play.google.com/store/apps/details?id=com.manextapps.animalworld" tabindex="-1" aria-hidden="true"><img src="assets/feature-animal-world.webp" width="1024" height="500" alt="" loading="lazy"></a>
+          <div class="app-head">
+            <img class="app-icon" src="assets/icon-animal-world.webp" width="192" height="192" alt="">
+            <div class="app-title"><h4><bdi dir="rtl" lang="he">עולם החיות</bdi><span class="app-sub">Animal World</span></h4></div>
+          </div>
+          <span class="tag">Young children</span>
+          <p class="app-pitch">Meet the animals, hear the sounds they make and play a gentle guessing game. All in Hebrew, made for little ones.</p>
+          <div class="app-links">
+            <a class="btn-play" href="https://play.google.com/store/apps/details?id=com.manextapps.animalworld">Get it on Google Play</a>
+            <a class="text-link" href="animalworld-privacy/">Privacy policy</a>
+          </div>
+        </article>
+
+        <article class="app" id="learn-money">
+          <a class="app-art" href="https://play.google.com/store/apps/details?id=com.manextapps.learnmoney" tabindex="-1" aria-hidden="true"><img src="assets/feature-learn-money.webp" width="1024" height="500" alt="" loading="lazy"></a>
+          <div class="app-head">
+            <img class="app-icon" src="assets/icon-learn-money.webp" width="192" height="192" alt="">
+            <div class="app-title"><h4><bdi dir="rtl" lang="he">החנות שלי: לומדים כסף</bdi><span class="app-sub">My Shop: Learn Money</span></h4></div>
+          </div>
+          <span class="tag">Ages 6 to 12</span>
+          <p class="app-pitch">Run a little shop and learn Israeli money: coins and notes, counting, paying and giving change. The first 45 lessons are free.</p>
+          <div class="app-links">
+            <a class="btn-play" href="https://play.google.com/store/apps/details?id=com.manextapps.learnmoney">Get it on Google Play</a>
+            <a class="text-link" href="learnmoney-privacy/">Privacy policy</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="watch" id="watch" aria-labelledby="watch-title">
+    <div class="watch-inner wrap">
+      <a class="watch-thumb" href="https://youtube.com/shorts/NnOFoHp1neo" aria-label="Watch the Crack the Vault short on YouTube">
+        <img src="assets/short-crack-the-vault.webp" width="540" height="960" alt="" loading="lazy">
+      </a>
+      <div>
+        <h2 id="watch-title">See how Crack the Vault plays</h2>
+        <p>Read the clues, punch in a guess and watch the vault swing open. A short video from our YouTube channel.</p>
+        <div class="watch-actions">
+          <a class="btn-sun" href="https://youtube.com/shorts/NnOFoHp1neo">Watch on YouTube</a>
+          <a class="watch-link" href="https://play.google.com/store/apps/details?id=com.crackthevault.game">Get the game on Google Play</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section about wrap" id="about" aria-labelledby="about-title">
+    <div class="about-grid">
+      <h2 id="about-title">A small studio with one developer</h2>
+      <div class="about-copy">
+        <p>ManextApps is one developer making the kind of apps they want on their own phone: quick to open, easy to understand and free of clutter. Each app stays small and asks only for what it really needs.</p>
+        <ul class="principles">
+          <li><b>Offline first</b><span>Play and track on a plane, on the train or anywhere without signal.</span></li>
+          <li><b>No accounts</b><span>Open the app and start. There is nothing to sign up for.</span></li>
+          <li><b>Private by design</b><span>Your progress, lists and settings stay on your phone. Each app has a short, plain privacy policy.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact-inner wrap">
+      <h2 id="contact-title">Questions, ideas or a bug to report?</h2>
+      <a class="contact-mail" href="mailto:manextapps@gmail.com">manextapps@gmail.com</a>
+      <p>Every message is read by the person who builds the apps.</p>
+    </div>
+  </section>
 </main>
+
+<footer class="footer wrap">
+  <div class="footer-brand">
+    <b>ManextApps</b>
+    <span>© 2026 ManextApps. <a href="mailto:manextapps@gmail.com">manextapps@gmail.com</a></span>
+  </div>
+  <nav aria-label="Privacy policies">
+    <ul class="footer-privacy">
+      <li><a href="crack-the-vault-privacy/">Crack the Vault privacy</a></li>
+      <li><a href="bouncy-journey-privacy/">Bouncy Journey privacy</a></li>
+      <li><a href="habitat-privacy/">Habitat privacy</a></li>
+      <li><a href="mayotze-privacy/">Decision Wheel privacy</a></li>
+      <li><a href="animalworld-privacy/">Animal World privacy</a></li>
+      <li><a href="learnmoney-privacy/">Learn Money privacy</a></li>
+    </ul>
+  </nav>
+</footer>
 </body>
 </html>
