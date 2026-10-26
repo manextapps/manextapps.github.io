@@ -780,3 +780,6 @@ p {
 .footer-brand a:hover {
   color: var(--ink);
 }
+
+.pp-badge { display: inline-block; margin-top: 14px; line-height: 0; }
+.pp-badge img { width: 200px; height: auto; border-radius: 8px; }
