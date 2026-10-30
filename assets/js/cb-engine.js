@@ -679,61 +679,66 @@
     });
     var parts = [];
     if (ins.length) parts.push(joinWords(ins) + (ins.length === 1 ? " is in the code" : " are in the code"));
-    if (outs.length) parts.push(joinWords(outs) + (outs.length === 1 ? " is not in the code" : " are not in the code"));
+    if (outs.length) parts.push(joinWords(outs) + (outs.length === 1 ? " isn't in the code" : " aren't in the code"));
     parts = parts.concat(ats);
     Object.keys(notAt).forEach(function (d) {
       var slots = notAt[d].sort();
       var list = slots.length === 1 ? String(slots[0]) : slots.slice(0, -1).join(", ") + " or " + slots[slots.length - 1];
-      parts.push(d + " is not in slot" + (slots.length > 1 ? "s " : " ") + list);
+      parts.push(d + " isn't in slot" + (slots.length > 1 ? "s " : " ") + list);
     });
     return parts.join("; ");
   }
 
   function reasonText(r) {
     switch (r.type) {
-      case "clue": return "clue " + (r.clue + 1) + " could no longer be true";
-      case "slot": return "slot " + (r.pos + 1) + " would be left without a possible digit";
+      case "clue": return "clue " + (r.clue + 1) + " can't be true anymore";
+      case "slot": return "slot " + (r.pos + 1) + " would have no digit left";
       case "digit": return r.digit + " would have nowhere to go";
       case "toomany": return "the code would need too many digits";
-      default: return "too few digits would be left to fill the code";
+      default: return "there wouldn't be enough digits left to fill the code";
     }
   }
 
   function digitsText(ds) { return joinWords(ds.map(String)); }
 
-  function explain(step, n) {
-    var so = " So " + factsText(step.facts) + ".";
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+
+  /** The reason for a step and what follows from it, in plain words. */
+  function explainParts(step, n) {
+    var so = factsText(step.facts);
     var c = step.clue + 1;
     var req = step.required;
+    var sup = step.support || [];
+    var already = sup.length === 1 ? sup[0] + " is already that one" : digitsText(sup) + " are already those";
+    var why;
     switch (step.rule) {
-      case "NONE_CLUE": return "Clue " + c + " says none of its digits is in the code." + so;
-      case "SLOT_SINGLE": return "Only " + step.support[0] + " can still go in slot " + (step.pos + 1) + "." + so;
-      case "DIGIT_SINGLE": return step.support[0] + " is in the code, and slot " + (step.pos + 1) + " is the only place left for it." + so;
-      case "DIGIT_NO_SLOT": return step.support[0] + " has no slot left where it could go." + so;
-      case "CODE_FULL": return "The code has " + n + " digits, and " + digitsText(step.support) + " are already known to be in it." + so;
-      case "CODE_REMAINING": return "The code needs " + n + " digits, and only " + digitsText(step.support) + " can still be in it." + so;
-      case "CONTRADICTION": return "Suppose " + factsText([step.assumption]) + ". Following the clues, " + reasonText(step.reason) + "." + so;
-      case "CLUE_ACCOUNTED": {
-        var by = step.support.length ? ", and that is already accounted for by " + digitsText(step.support) + "." : ".";
-        if (step.cat === CAT_IN_PLACE) {
-          if (req === 0) return "Clue " + c + " has no digit in its correct slot." + so;
-          return "Clue " + c + " has exactly " + req + (req === 1 ? " digit in its correct slot" : " digits in their correct slots") + by + so;
-        }
-        if (step.cat === CAT_MISPLACED) {
-          if (req === 0) return "Clue " + c + " has no correct digit in a different slot." + so;
-          return "Clue " + c + " has exactly " + req + (req === 1 ? " correct digit in a different slot" : " correct digits in different slots") + by + so;
-        }
-        if (req === 0) return "Every digit of clue " + c + " is in the code." + so;
-        return "Clue " + c + " has exactly " + req + (req === 1 ? " digit that is not in the code" : " digits that are not in the code") + by + so;
-      }
+      case "NONE_CLUE": why = "Clue " + c + " says none of its digits is in the code."; break;
+      case "SLOT_SINGLE": why = "Only " + sup[0] + " can still go in slot " + (step.pos + 1) + "."; break;
+      case "DIGIT_SINGLE": why = sup[0] + " is in the code, and slot " + (step.pos + 1) + " is the only place left for it."; break;
+      case "DIGIT_NO_SLOT": why = sup[0] + " has no slot left where it could go."; break;
+      case "CODE_FULL": why = "The code has " + n + " digits, and you already know " + digitsText(sup) + " are in it."; break;
+      case "CODE_REMAINING": why = "The code needs " + n + " digits, and only " + digitsText(sup) + " can still be in it."; break;
+      case "CONTRADICTION": why = "Suppose " + factsText([step.assumption]) + ". Then " + reasonText(step.reason) + "."; break;
+      case "CLUE_ACCOUNTED":
+        if (step.cat === CAT_IN_PLACE) why = req === 0 ? "Clue " + c + " has no digit in the right slot." : "Clue " + c + " has " + plural(req, "digit", "digits") + " in the right slot, and " + already + ".";
+        else if (step.cat === CAT_MISPLACED) why = req === 0 ? "Clue " + c + " has no correct digit in a different slot." : "Clue " + c + " has " + plural(req, "correct digit", "correct digits") + " in a different slot, and " + already + ".";
+        else why = req === 0 ? "Every digit of clue " + c + " is in the code." : "Clue " + c + " has " + plural(req, "digit that isn't", "digits that aren't") + " in the code, and " + already + ".";
+        break;
       case "CLUE_FORCED": {
-        var only = digitsText(step.support);
-        if (step.cat === CAT_IN_PLACE) return "Clue " + c + " needs exactly " + req + (req === 1 ? " digit in its correct slot" : " digits in their correct slots") + ", and only " + only + " can still be there." + so;
-        if (step.cat === CAT_MISPLACED) return "Clue " + c + " needs exactly " + req + (req === 1 ? " correct digit in a different slot" : " correct digits in different slots") + ", and only " + only + " can still be " + (req === 1 ? "one" : "those") + "." + so;
-        return "Clue " + c + " has exactly " + req + (req === 1 ? " digit that is not in the code" : " digits that are not in the code") + ", and only " + only + " can still be missing." + so;
+        var only = digitsText(sup);
+        if (step.cat === CAT_IN_PLACE) why = "Clue " + c + " needs " + plural(req, "digit", "digits") + " in the right slot, and only " + only + " can still be there.";
+        else if (step.cat === CAT_MISPLACED) why = "Clue " + c + " needs " + plural(req, "correct digit", "correct digits") + " in a different slot, and only " + only + " can still be " + (req === 1 ? "that one." : "those.");
+        else why = "Clue " + c + " has " + plural(req, "digit that isn't", "digits that aren't") + " in the code, and only " + only + " can still be missing.";
+        break;
       }
+      default: why = "";
     }
-    return so.trim();
+    return { why: why, so: so.charAt(0).toUpperCase() + so.slice(1) + "." };
+  }
+
+  function explain(step, n) {
+    var p = explainParts(step, n);
+    return p.why + " So " + p.so.charAt(0).toLowerCase() + p.so.slice(1);
   }
 
   var api = {
@@ -741,7 +746,7 @@
     table: table, solutions: solutions, Knowledge: Knowledge, LogicSolver: LogicSolver, rate: rate,
     SPECS: SPECS, DAILY_TIERS: DAILY_TIERS, generate: generate, generateWithRetries: generateWithRetries,
     generateAt: generateAt, daily: daily, dailySeed: dailySeed, clueText: clueText, explain: explain,
-    factsText: factsText, LEVEL: LEVEL,
+    factsText: factsText, explainParts: explainParts, LEVEL: LEVEL,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.CB = api;

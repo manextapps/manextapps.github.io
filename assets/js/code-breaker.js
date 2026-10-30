@@ -192,7 +192,7 @@ var CB_TABLE={"2026-10-28":[0,0,3],"2026-10-29":[0,1,3],"2026-10-30":[2,1,2],"20
     });
     var list = broken.length === 1 ? "clue " + broken[0] :
       "clues " + broken.slice(0, -1).join(", ") + " and " + broken[broken.length - 1];
-    say(code + " is not the combination. It breaks " + list + ". Check " +
+    say(code + " isn't the combination. It breaks " + list + ". Check " +
       (broken.length === 1 ? "that clue" : "those clues") + " against your code and try again.", "bad");
     render();
   }
@@ -214,7 +214,7 @@ var CB_TABLE={"2026-10-28":[0,0,3],"2026-10-29":[0,1,3],"2026-10-30":[2,1,2],"20
     if (s.solved) return;
     var step = s.solver.next(s.k, true, true);
     if (!step) {
-      say("The clues and hints already pin down the code. Fill it in and open the vault.", "info");
+      say("The clues and your hints already pin down the code. Fill it in and open the vault.", "info");
       return;
     }
     step.facts.forEach(function (f) { s.k.apply(f); });
@@ -253,7 +253,7 @@ var CB_TABLE={"2026-10-28":[0,0,3],"2026-10-29":[0,1,3],"2026-10-30":[2,1,2],"20
     var n = state.n;
     var seed = (Math.random() * 4294967296) >>> 0;
     if (window.crypto && crypto.getRandomValues) seed = crypto.getRandomValues(new Uint32Array(1))[0];
-    say("Building a practice vault...", "info");
+    say("Building a practice vault…", "info");
     var nextSeed = new CB.Rng(seed);
     var spec = CB.SPECS[CB.DAILY_TIERS[n]];
     (function attempt(i) {

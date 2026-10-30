@@ -64,16 +64,16 @@
     } else if (all.length <= 40) {
       html += '<p class="ck-codes">' + all.map(function (c) { return "<span>" + c + "</span>"; }).join("") + "</p>";
     } else {
-      html += "<p>Add more clues to narrow it down. The list shows once 40 or fewer codes are left.</p>";
+      html += "<p>Add more clues to narrow it down. The list shows up once 40 or fewer codes are left.</p>";
     }
     if (all.length === 1) {
       var res = new CB.LogicSolver(r.n, r.clues).solve();
       if (res.solved) {
-        html += "<p>Exactly one answer. Here is how to get there with logic alone:</p><ol class=\"steps\">" +
+        html += "<p>Exactly one answer. Here's how to get there with logic alone:</p><ol class=\"steps\">" +
           res.steps.map(function (s) { return "<li>" + CB.explain(s, r.n) + "</li>"; }).join("") + "</ol>";
       } else {
-        html += "<p>Exactly one answer, but our step by step solver gets stuck after " + res.steps.length +
-          " steps. Reaching it needs trial and error or a deeper case split.</p>";
+        html += "<p>Exactly one answer, but my step by step solver gets stuck after " + res.steps.length +
+          " steps. You'd need trial and error or a deeper case split to reach it.</p>";
       }
     }
     out.innerHTML = html;
