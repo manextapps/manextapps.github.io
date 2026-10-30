@@ -37,7 +37,7 @@
       if (!n) n = guess.length;
       if (!/^[0-9]{3,5}$/.test(guess)) problems.push("Guess " + (idx + 1) + " needs 3 to 5 digits.");
       else if (guess.length !== n) problems.push("Guess " + (idx + 1) + " has a different length from guess 1.");
-      else if (new Set(guess).size !== guess.length) problems.push("Guess " + (idx + 1) + " repeats a digit. This checker works with codes of different digits.");
+      else if (new Set(guess).size !== guess.length) problems.push("Guess " + (idx + 1) + " repeats a digit. This only works with codes of different digits.");
       else if (c.exact > c.total) problems.push("Guess " + (idx + 1) + ": the digits in the right place cannot be more than the digits in the code.");
       else if (c.total > n) problems.push("Guess " + (idx + 1) + " counts more digits than it has.");
       clues.push(c);
