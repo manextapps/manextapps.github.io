@@ -62,7 +62,7 @@
       <tr><td>Over 400 ms</td><td>Warming up</td></tr>
     </tbody>
   </table></div>
-  <p>The "faster than about n% of players" line comes from a simple model centered on 273 ms. It's a rough guide, not a ranking of real people.</p>
+  <p>The "faster than about n% of players" line comes from a simple model centered on 273 ms. It's a rough guide, not a comparison with real people's scores.</p>
 
   <h2 id="timing">How this page times you, and what it can't see</h2>
   <p>I spent a lot of time on timing for my Android app, and this test follows the same approach as far as a browser allows. The switch to green happens inside a single animation frame, with no fade. The clock starts at the next frame, which is the earliest the green can actually be on your screen. Your tap is timed with the timestamp the browser gives the input event, so a busy page doesn't add delay.</p>
