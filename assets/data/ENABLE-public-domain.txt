@@ -1,0 +1,3 @@
+ENABLE (Enhanced North American Benchmark LExicon) word list, enable1.txt.
+The ENABLE word list is in the public domain.
+Source used: https://github.com/dolph/dictionary/blob/master/enable1.txt
