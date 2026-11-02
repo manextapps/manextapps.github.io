@@ -153,7 +153,7 @@ var QN_GUIDED={"n":6,"seed":12,"regions":[0,0,0,5,5,5,0,0,5,5,5,4,0,5,5,5,4,4,0,
   function fresh(size) {
     var s = SPECS[size], seed = Math.floor(Math.random() * 1e9), pz = null;
     for (var k = 0; k < 6 && !pz; k++) pz = Q.generate(s[0], s[1], s[2], seed + k * 101, 60);
-    if (!pz) return;
+    if (!pz) { hintEl.textContent = "That board didn't come out right. Tap the size again for another one."; return; }
     start(pz, false, size + " by " + size + " board");
     tabs.forEach(function (t) { t.setAttribute("aria-pressed", String(+t.dataset.size === size)); });
   }
