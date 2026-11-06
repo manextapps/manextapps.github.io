@@ -1,6 +1,6 @@
 /* 52 week savings challenge calculator. Same amounts as the Savings Challenge app (domain/Plan.kt):
- * cell n saves n x the first amount, laid out small first, big first or shuffled; 26 paydays every
- * two weeks; 100 envelopes numbered 1 to 100. Money is kept in cents so totals never drift. */
+ * cell n saves n x the first amount, laid out small first, big first or shuffled; 26 weeks; 26 paydays
+ * every two weeks; 100 envelopes numbered 1 to 100. Money is kept in cents so totals never drift. */
 (function () {
   "use strict";
   var root = document.getElementById("savings-tool");
@@ -8,6 +8,7 @@
 
   var TYPES = {
     weeks: { count: 52, step: 7, base: "1", unit: "Week", title: "52 week savings challenge" },
+    half: { count: 26, step: 7, base: "1", unit: "Week", title: "26 week savings challenge" },
     paydays: { count: 26, step: 14, base: "10", unit: "Payday", title: "26 payday savings challenge" },
     envelopes: { count: 100, step: 0, base: "1", unit: "Envelope", title: "100 envelope challenge" },
   };
@@ -140,7 +141,7 @@
     var parts = [
       ["Total at the end", money(total, s.currency)],
       ["Biggest single save", money(biggest, s.currency)],
-      [state.type === "envelopes" ? "Envelopes" : state.type === "weeks" ? "Weeks" : "Paydays", String(t.count)],
+      [state.type === "envelopes" ? "Envelopes" : state.type === "paydays" ? "Paydays" : "Weeks", String(t.count)],
     ];
     if (last && last.date !== null) parts.push(["Last save", dayLabel(last.date)]);
     parts.push(["Saved so far", money(saved, s.currency) + " (" + savedCount + " of " + t.count + ")"]);
@@ -292,6 +293,12 @@
       state.type = b.getAttribute("data-type");
       els.base.value = TYPES[state.type].base;
       render();
+    } else if (b.hasAttribute("data-preset")) {
+      state.type = b.getAttribute("data-preset");
+      els.base.value = b.getAttribute("data-base");
+      els.order.value = b.getAttribute("data-order");
+      render();
+      form.scrollIntoView({ block: "nearest" });
     } else if (b.hasAttribute("data-cell")) {
       var n = Number(b.getAttribute("data-cell"));
       toggle(n, !state.done[n]);
