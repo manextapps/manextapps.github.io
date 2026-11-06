@@ -75,6 +75,7 @@
       "<dl><div><dt>Average</dt><dd>" + avg + " ms</dd></div><div><dt>Best try</dt><dd>" + best + " ms</dd></div>" +
       "<div><dt>Consistency</dt><dd>± " + spread + " ms</dd></div><div><dt>Too early</dt><dd>" + early + "</dd></div></dl>" +
       "<p>Faster than about " + fasterThan(avg) + "% of players, going by the rough model my app uses (a typical result is around 273 ms). Treat it as a rough guide: your screen, browser and mouse or touchscreen all add a little time.</p>";
+    root.dispatchEvent(new CustomEvent("rt:done", { detail: { average: avg, best: best, spread: spread } }));
     var bestRun = 0;
     try {
       bestRun = Number(localStorage.getItem("rt:best")) || 0;
