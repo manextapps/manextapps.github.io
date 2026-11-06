@@ -72,6 +72,9 @@
 <h2 id="greedy">Why taking the most tiles loses</h2>
 <p>The natural way to play is to pick whichever color grows the flood the most. It feels right, and on small boards it's fine. On bigger ones it costs a lot.</p>
 <p>I tested it. On 200 random 14x14 boards with 6 colors, one of the quick play sizes in my app, taking the most tiles every move needed 26.1 moves on average. My app's solver needed 20.3. It lost to the solver on 200 of the 200 boards, by up to 13 moves, and with the move limit of par plus 4 it would have run out of moves on 142 of them.</p>
+<h3>What about heading for the far corner?</h3>
+<p>A popular tip is to drive the flood straight at the opposite corner first. I tested that too, on the same 200 boards: each move picks the color that brings the bottom right tile closest, and once the corner's reached, it goes back to taking the most tiles.</p>
+<p>It helps, a little. It averaged 25.2 moves against 26.1 for taking the most tiles, and finished inside par plus 4 on 88 boards instead of 58. It beat the tile grabber on 108 boards but lost on 58. The solver's 20.3 is still a long way off, because no single rule of thumb looks far enough ahead.</p>
 <p>So the tile count is the wrong thing to watch. Here's what to watch instead.</p>
 
 <h2 id="count">The two numbers that matter</h2>
