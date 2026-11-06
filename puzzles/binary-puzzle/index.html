@@ -39,6 +39,7 @@
       <button type="button" data-level="expert" aria-pressed="false">Expert 10x10</button>
     </div>
     <label class="bn-toggle"><input type="checkbox" name="digits"> Show 0 and 1</label>
+    <label class="bn-toggle"><input type="checkbox" name="plain"> No signs</label>
   </div>
   <div class="bn-board" tabindex="0" role="grid" aria-label="Binary puzzle grid"></div>
   <p class="bn-msg" role="status" aria-live="polite"></p>
@@ -52,10 +53,10 @@
   <noscript><p>The board needs JavaScript. The rules and the solving steps below read fine without it.</p></noscript>
 </section>
 <script src="/assets/js/binary-engine.js?v=cc4c7b0b"></script>
-<script src="/assets/js/binary-play.js?v=54a0bf88"></script>
+<script src="/assets/js/binary-play.js?v=ef59bfa6"></script>
 
 <p>Tap a cell to cycle it through sun, moon and empty. The shaded cells are fixed. With a keyboard, focus the board, move with the arrow keys, and press S or 1 for a sun, M or 0 for a moon, Backspace to clear. Broken rules show up in red straight away.</p>
-<p>Hint marks the cells it's talking about and tells you why, and Apply fills them in. Tick Show 0 and 1 if you'd rather play with digits: a sun is 1 and a moon is 0.</p>
+<p>Hint marks the cells it's talking about and tells you why, and Apply fills them in. Tick Show 0 and 1 if you'd rather play with digits: a sun is 1 and a moon is 0. Tick No signs for classic looking boards with no = or &times; at all.</p>
 
 <h2 id="rules">The rules</h2>
 <ul>
@@ -69,6 +70,7 @@
 <h3>Binary puzzle, takuzu, binairo: what's the difference?</h3>
 <p>They're the same family. The classic binary puzzle, also known as takuzu or binairo, uses 0 and 1 and has one more rule: no two rows may be identical, and no two columns either. It has no signs.</p>
 <p>The sun and moon version drops the identical rows rule and uses the = and &times; signs instead, which makes small boards a lot more interesting. The boards on this page follow the sun and moon rules. The half and half rule and the no three in a row rule work the same in both, and so do all the steps below.</p>
+<p>If you prefer the classic look, tick No signs above the board. You'll get boards with only fixed symbols as clues, and with Show 0 and 1 ticked too, they look just like a takuzu grid. They still don't use the identical rows rule. The generator only keeps a sign free board when its fixed symbols alone lead to exactly one answer, found with the same steps.</p>
 
 <h2 id="how-made">Where the boards come from</h2>
 <p>The boards are made in your browser by the generator from my Sun and Moon app, with the same four levels. It fills a random grid that follows the rules, adds a few signs that agree with it, and then takes symbols away one at a time. After each one, a solver that only uses the six steps below tries to finish the board. If it can't, the symbol goes back. So every board can be solved step by step, and a separate search checks there's only one answer.</p>
