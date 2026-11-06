@@ -1,4 +1,4 @@
-var MS_HARD=[{"id":"L1","tier":"three numbers","equation":"95=19+5+10"},{"id":"L2","tier":"three numbers","equation":"19+13+5=96"},{"id":"L3","tier":"three numbers","equation":"18=8+18-15"},{"id":"L4","tier":"three numbers","equation":"18+16-8=19"},{"id":"L5","tier":"three numbers","equation":"18=9-9-19"},{"id":"L6","tier":"three numbers","equation":"16-18-15=79"},{"id":"L7","tier":"three numbers","equation":"19-19+12=58"},{"id":"L8","tier":"three numbers","equation":"59=16+18-19"},{"id":"S1","tier":"sign swaps","equation":"17-15+10=8"},{"id":"S2","tier":"sign swaps","equation":"23-19+18=14"},{"id":"S3","tier":"sign swaps","equation":"17-19+8=10"},{"id":"S4","tier":"sign swaps","equation":"6-16+9=19"},{"id":"B1","tier":"big numbers","equation":"1961=969+593"},{"id":"B2","tier":"big numbers","equation":"1893=997-696"},{"id":"B3","tier":"big numbers","equation":"1851=598+859"},{"id":"B4","tier":"big numbers","equation":"999+989=1548"},{"id":"B5","tier":"big numbers","equation":"1995=998+391"},{"id":"B6","tier":"big numbers","equation":"1993=995-958"}];
+var MS_HARD=[{"id":"L1","tier":"three numbers","equation":"95=19+5+10"},{"id":"L2","tier":"three numbers","equation":"19+13+5=96"},{"id":"L3","tier":"three numbers","equation":"18=8+18-15"},{"id":"L4","tier":"three numbers","equation":"18+16-8=19"},{"id":"L5","tier":"three numbers","equation":"18=9-9-19"},{"id":"L6","tier":"three numbers","equation":"16-18-15=79"},{"id":"L7","tier":"three numbers","equation":"19-19+12=58"},{"id":"L8","tier":"three numbers","equation":"59=16+18-19"},{"id":"S1","tier":"sign swaps","equation":"17-15+10=8"},{"id":"S2","tier":"sign swaps","equation":"23-19+18=14"},{"id":"S3","tier":"sign swaps","equation":"17-19+8=10"},{"id":"S4","tier":"sign swaps","equation":"6-16+9=19"},{"id":"B1","tier":"big numbers","equation":"1961=969+593"},{"id":"B2","tier":"big numbers","equation":"1893=997-696"},{"id":"B3","tier":"big numbers","equation":"1851=598+859"},{"id":"B4","tier":"big numbers","equation":"999+989=1548"},{"id":"B5","tier":"big numbers","equation":"1995=998+391"},{"id":"B6","tier":"big numbers","equation":"1993=995-958"},{"id":"T1","tier":"two matches","equation":"5-84=98","moves":2,"answer":"9+84=93","from":[38,39],"to":[1,9]},{"id":"T2","tier":"two matches","equation":"58+6=43","moves":2,"answer":"58-9=49","from":[16,21],"to":[18,39]},{"id":"T3","tier":"two matches","equation":"47+1=13","moves":2,"answer":"17+1=18","from":[5,6],"to":[38,39]},{"id":"T4","tier":"two matches","equation":"9+15=93","moves":2,"answer":"8+15=23","from":[29,32],"to":[4,31]},{"id":"T5","tier":"two matches","equation":"63-94=46","moves":2,"answer":"83-34=49","from":[22,45],"to":[1,42]},{"id":"T6","tier":"two matches","equation":"90+69=7","moves":2,"answer":"96-89=7","from":[8,16],"to":[13,18]}];
 var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy","equation":"6-7=2"},{"id":"E3","tier":"easy","equation":"0+8=3"},{"id":"E4","tier":"easy","equation":"2-2=9"},{"id":"E5","tier":"easy","equation":"8-0=3"},{"id":"E6","tier":"easy","equation":"0-4=5"},{"id":"E7","tier":"easy","equation":"1+6=5"},{"id":"E8","tier":"easy","equation":"3+9=3"},{"id":"E9","tier":"easy","equation":"6+4=5"},{"id":"E10","tier":"easy","equation":"4-4=6"},{"id":"M1","tier":"medium","equation":"3-2=6"},{"id":"M2","tier":"medium","equation":"9+7=1"},{"id":"M3","tier":"medium","equation":"2-8=6"},{"id":"M4","tier":"medium","equation":"0-8=0"},{"id":"M5","tier":"medium","equation":"7+0=1"},{"id":"M6","tier":"medium","equation":"4-5=8"},{"id":"M7","tier":"medium","equation":"0+2=6"},{"id":"M8","tier":"medium","equation":"7-5=6"},{"id":"M9","tier":"medium","equation":"8+6=0"},{"id":"M10","tier":"medium","equation":"5-4=8"},{"id":"H1","tier":"hard","equation":"3+18=15"},{"id":"H2","tier":"hard","equation":"18-19=29"},{"id":"H3","tier":"hard","equation":"11+6=3"},{"id":"H4","tier":"hard","equation":"3-13=10"},{"id":"H5","tier":"hard","equation":"3+12=17"},{"id":"H6","tier":"hard","equation":"6+13=29"},{"id":"H7","tier":"hard","equation":"3-12=19"},{"id":"H8","tier":"hard","equation":"16+0=8"},{"id":"H9","tier":"hard","equation":"2+15=15"},{"id":"H10","tier":"hard","equation":"2+18=19"}];
 /* Matchstick board on /puzzles/matchstick-puzzles/ (MS_SET) and /puzzles/hardest-matchstick-puzzles/ (MS_HARD,
    picked with data-set="hard" on #ms). Needs matchstick-engine.js (window.MatchEngine).
@@ -52,11 +52,11 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
     var without = cur.slice();
     if (lifted != null) without[lifted] = false;
     var landings = lifted != null ? board.landings(without) : [];
-    var hintFrom = hintLevel >= 2 ? hintTarget().from : null, hintTo = hintLevel >= 3 ? hintTarget().to : null;
+    var hintFrom = hintLevel >= 2 ? [].concat(hintTarget().from) : [], hintTo = hintLevel >= 3 ? [].concat(hintTarget().to) : [];
     g.sticks.forEach(function (t) {
       var s = t.s, on = cur[t.slot];
-      if (!on && landings.indexOf(t.slot) < 0 && t.slot !== hintTo) return;
-      var grp = el("g", { class: on ? "ms-stick" + (t.slot === lifted ? " is-lifted" : "") + (t.slot === hintFrom ? " is-hint" : "") : "ms-spot" + (t.slot === hintTo ? " is-hint" : ""),
+      if (!on && landings.indexOf(t.slot) < 0 && hintTo.indexOf(t.slot) < 0) return;
+      var grp = el("g", { class: on ? "ms-stick" + (t.slot === lifted ? " is-lifted" : "") + (hintFrom.indexOf(t.slot) >= 0 ? " is-hint" : "") : "ms-spot" + (hintTo.indexOf(t.slot) >= 0 ? " is-hint" : ""),
         tabindex: "0", role: "button", "data-slot": t.slot, "aria-label": on ? "Match " + (t.slot + 1) : "Empty spot " + (t.slot + 1) });
       grp.appendChild(el("line", { class: "ms-hit", x1: s[0], y1: s[1], x2: s[2], y2: s[3] }));
       grp.appendChild(el("line", { x1: s[0], y1: s[1], x2: s[2], y2: s[3] }));
@@ -69,7 +69,12 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
     svgWrap.appendChild(svg);
   }
 
+  function moves() { return SET[idx].moves || 1; }
+
   function hintTarget() {
+    var p = SET[idx];
+    // Two match puzzles carry their answer: searching every pair of moves is too slow for a tap.
+    if (moves() === 2) return { from: p.from, to: p.to, text: p.answer };
     var sols = M.solutions(board, start);
     var best = sols[0];
     return best ? { from: best.from, to: best.to, text: best.text } : { from: null, to: null, text: "" };
@@ -79,8 +84,10 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
 
   function judge() {
     var used = M.used(start, cur), p = SET[idx];
+    var need = moves();
     if (used === 0) { say("Pick up a match, then tap an empty spot to put it down."); return; }
-    if (used > 1) { say("That's more than one match moved. Tap Undo or Reset.", "is-bad"); return; }
+    if (used > need) { say(need === 1 ? "That's more than one match moved. Tap Undo or Reset." : "That's more than two matches moved. Tap Undo or Reset.", "is-bad"); return; }
+    if (used < need) { say("That's one match moved. This puzzle needs two, so move one more."); return; }
     var c = board.canonical(cur);
     if (board.evaluate(c) === 1) {
       root.classList.add("is-solved");
@@ -118,7 +125,7 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
     root.classList.remove("is-solved");
     title.textContent = "Puzzle " + p.id + " (" + p.tier + ")";
     picker.value = p.id;
-    say("Move exactly one match to make the equation true.");
+    say(moves() === 2 ? "Move exactly two matches to make the equation true." : "Move exactly one match to make the equation true.");
     draw();
   }
 
@@ -155,12 +162,20 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
     if (root.classList.contains("is-solved")) return;
     if (M.used(start, cur) > 0) { history.push(cur.slice()); cur = start.slice(); lifted = null; }
     hintLevel = Math.min(3, hintLevel + 1);
-    var h = hintTarget(), cell = board.cellOf(h.from), toCell = board.cellOf(h.to);
-    var ch = SET[idx].equation.replace(/\s/g, "")[cell];
+    var h = hintTarget(), eq = SET[idx].equation.replace(/\s/g, "");
     var name = function (c) { return c === "+" ? "the plus" : c === "-" ? "the minus" : c === "=" ? "the equals sign" : "the " + c; };
-    if (hintLevel === 1) say("Hint 1: the match to move comes from " + name(ch) + ".");
-    else if (hintLevel === 2) say("Hint 2: it's the highlighted match. Where could it make " + name(SET[idx].equation[toCell]) + " into something else?");
-    else say("Hint 3: put it on the highlighted spot. The answer is " + h.text.replace(/-/g, " \u2212 ").replace(/\+/g, " + ").replace(/=/g, " = ") + ".");
+    var answer = h.text.replace(/-/g, " \u2212 ").replace(/\+/g, " + ").replace(/=/g, " = ");
+    if (moves() === 2) {
+      var froms = h.from.map(function (s) { return name(eq[board.cellOf(s)]); });
+      if (hintLevel === 1) say("Hint 1: the two matches come from " + (froms[0] === froms[1] ? froms[0] : froms[0] + " and " + froms[1]) + ".");
+      else if (hintLevel === 2) say("Hint 2: they're the two highlighted matches.");
+      else say("Hint 3: put them on the highlighted spots. The answer is " + answer + ".");
+    } else {
+      var cell = board.cellOf(h.from), toCell = board.cellOf(h.to);
+      if (hintLevel === 1) say("Hint 1: the match to move comes from " + name(eq[cell]) + ".");
+      else if (hintLevel === 2) say("Hint 2: it's the highlighted match. Where could it make " + name(eq[toCell]) + " into something else?");
+      else say("Hint 3: put it on the highlighted spot. The answer is " + answer + ".");
+    }
     if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "match-hint-" + hintLevel, event: true });
     draw();
   });

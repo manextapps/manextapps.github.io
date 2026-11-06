@@ -24,6 +24,7 @@ var BN_START="6|MSMMSSMSMMSSSMSSMMSMSMMSMSMSSMSMSSMM|..M...M..............MM....
   var titleEl = root.querySelector(".bn-title");
   var applyBtn = root.querySelector("[data-apply]");
   var binBox = root.querySelector("[name=digits]");
+  var plainBox = root.querySelector("[name=plain]");
   var p, v, history, cellEls, cursor = 0, step = null, level = "medium", started, done;
 
   function store(k, val) {
@@ -173,6 +174,8 @@ var BN_START="6|MSMMSSMSMMSSSMSSMMSMSMMSMSMSSMSMSSMM|..M...M..............MM....
     root.classList.add("is-busy");
     setTimeout(function () {
       var spec = LEVELS[level], puzzle = null;
+      // Classic boards: no = or x signs at all, so the givens alone have to pin down the one answer.
+      if (plainBox.checked) spec = Object.assign({}, spec, { signs: [0, 0] });
       for (var tries = 0; !puzzle && tries < 400; tries++) {
         puzzle = B.generate(spec, (Math.random() * 4294967296) >>> 0);
         if (puzzle && B.solve(puzzle, 2).length !== 1) puzzle = null;
@@ -237,19 +240,21 @@ var BN_START="6|MSMMSSMSMMSSSMSSMMSMSMMSMSMSSMSMSSMM|..M...M..............MM....
   });
 
   binBox.addEventListener("change", function () { opts(); paint(); });
+  plainBox.addEventListener("change", function () { opts(); newBoard(); });
 
   function opts() {
     root.querySelectorAll("[data-level]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-level") === level)); });
     root.classList.toggle("as-digits", binBox.checked);
-    store("binary:settings", { level: level, digits: binBox.checked });
+    store("binary:settings", { level: level, digits: binBox.checked, plain: plainBox.checked });
   }
 
   var saved = store("binary:settings");
   if (saved) {
     if (LEVELS[saved.level]) level = saved.level;
     binBox.checked = !!saved.digits;
+    plainBox.checked = !!saved.plain;
   }
   opts();
-  if (level === "medium" && window.BN_START) load(B.decode(window.BN_START));
+  if (level === "medium" && !plainBox.checked && window.BN_START) load(B.decode(window.BN_START));
   else newBoard();
 })();

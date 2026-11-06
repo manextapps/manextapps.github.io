@@ -139,18 +139,37 @@
     return out;
   }
 
+  /* Every figure reachable by moving exactly two matches that makes a true equation (two match puzzles). */
+  function solutions2(board, start) {
+    var found = {}, out = [], on = [], off = [], i, j, k, l;
+    for (i = 0; i < board.slotCount; i++) (start[i] ? on : off).push(i);
+    var startKey = key(board.canonical(start));
+    for (i = 0; i < on.length; i++) for (j = i + 1; j < on.length; j++) {
+      for (k = 0; k < off.length; k++) for (l = k + 1; l < off.length; l++) {
+        var s = start.slice();
+        s[on[i]] = false; s[on[j]] = false; s[off[k]] = true; s[off[l]] = true;
+        s = board.canonical(s);
+        var sk = key(s);
+        if (sk === startKey || found[sk] || used(start, s) !== 2 || board.evaluate(s) !== 1) continue;
+        found[sk] = true;
+        out.push({ state: s, from: [on[i], on[j]], to: [off[k], off[l]], text: board.text(s) });
+      }
+    }
+    return out;
+  }
+
   function used(start, state) {
     var n = 0;
     for (var i = 0; i < start.length; i++) if (start[i] && !state[i]) n++;
     return n;
   }
 
-  function isSolved(board, start, state) {
+  function isSolved(board, start, state, moves) {
     var n = used(start, state);
-    return n === 1 && board.evaluate(board.canonical(state)) === 1;
+    return n === (moves || 1) && board.evaluate(board.canonical(state)) === 1;
   }
 
-  var api = { parse: parse, Board: Board, solutions: solutions, isSolved: isSolved, used: used, DIGIT_MASKS: DIGIT_MASKS };
+  var api = { parse: parse, Board: Board, solutions: solutions, solutions2: solutions2, isSolved: isSolved, used: used, DIGIT_MASKS: DIGIT_MASKS };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.MatchEngine = api;
 })(this);

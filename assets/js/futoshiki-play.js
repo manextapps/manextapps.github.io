@@ -185,6 +185,50 @@ var FS_START="5|4315221435325141524354321|0300000005000000000000020|........<...
     if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: "futoshiki-hint", event: true });
   }
 
+  /* A board as SVG for printing: fixed numbers, signs, and the answer when [values] is the solution. */
+  function boardSvg(pz, values) {
+    var n = pz.n, C = 60, o = '<svg class="fsp-svg" viewBox="0 0 ' + n * C + " " + n * C + '" role="img" aria-label="Futoshiki board">';
+    for (var i = 0; i < n * n; i++) {
+      var x = (i % n) * C, y = Math.floor(i / n) * C, v = values[i];
+      o += '<rect x="' + (x + 7) + '" y="' + (y + 7) + '" width="' + (C - 14) + '" height="' + (C - 14) + '" rx="6" class="' + (pz.givens[i] ? "g" : "") + '"/>';
+      if (v) o += '<text x="' + (x + C / 2) + '" y="' + (y + C / 2 + 8) + '" class="' + (pz.givens[i] ? "g" : "a") + '">' + v + "</text>";
+    }
+    pz.signs.forEach(function (s) {
+      var a = s[0], across = s[1] === a + 1, cx = across ? ((a % n) + 1) * C : (a % n) * C + C / 2, cy = across ? Math.floor(a / n) * C + C / 2 : (Math.floor(a / n) + 1) * C;
+      var angle = across ? (s[2] === F.GREATER ? 0 : 180) : (s[2] === F.GREATER ? 90 : -90);
+      o += '<path d="M-5-8 5 0-5 8" transform="translate(' + cx + " " + cy + ") rotate(" + angle + ')"/>';
+    });
+    return o + "</svg>";
+  }
+
+  function makeBoard(spec) {
+    for (var tries = 0; tries < 400; tries++) {
+      var pz = F.generate(spec, (Math.random() * 4294967296) >>> 0);
+      if (pz && F.solve(pz, 2).length === 1) return pz;
+    }
+    return null;
+  }
+
+  // Printing a sheet: six new boards at this level, and their answers on a page of their own.
+  var printRoot = document.createElement("div");
+  printRoot.id = "fs-print-root";
+  document.body.appendChild(printRoot);
+  window.addEventListener("afterprint", function () { printRoot.innerHTML = ""; });
+
+  function printSheet() {
+    var boards = [];
+    for (var k = 0; k < 6; k++) { var pz = makeBoard(LEVELS[level]); if (pz) boards.push(pz); }
+    var name = LEVELS[level].name, sheet = "", key = "";
+    boards.forEach(function (pz, k) {
+      sheet += "<figure><figcaption>" + (k + 1) + "</figcaption>" + boardSvg(pz, pz.givens) + "</figure>";
+      key += "<figure><figcaption>" + (k + 1) + "</figcaption>" + boardSvg(pz, pz.solution) + "</figure>";
+    });
+    printRoot.innerHTML = '<section class="fsp-page"><p class="fsp-title">Futoshiki, ' + name + ". Fill every row and column with 1 to " + LEVELS[level].size +
+      ' once, and make every sign true.</p><div class="fsp-grid">' + sheet + '</div><p class="fsp-foot">www.manextapps.com/puzzles/futoshiki/</p></section>' +
+      '<section class="fsp-page fsp-key"><p class="fsp-title">Answers</p><div class="fsp-grid">' + key + "</div></section>";
+    window.print();
+  }
+
   function newBoard() {
     root.classList.add("is-busy");
     setTimeout(function () {
@@ -262,6 +306,7 @@ var FS_START="5|4315221435325141524354321|0300000005000000000000020|........<...
       notes = v.map(function () { return 0; });
       changed();
     } else if (b.hasAttribute("data-new")) newBoard();
+    else if (b.hasAttribute("data-print")) printSheet();
   });
 
   function opts() {
