@@ -1,11 +1,15 @@
+var MS_HARD=[{"id":"L1","tier":"three numbers","equation":"95=19+5+10"},{"id":"L2","tier":"three numbers","equation":"19+13+5=96"},{"id":"L3","tier":"three numbers","equation":"18=8+18-15"},{"id":"L4","tier":"three numbers","equation":"18+16-8=19"},{"id":"L5","tier":"three numbers","equation":"18=9-9-19"},{"id":"L6","tier":"three numbers","equation":"16-18-15=79"},{"id":"L7","tier":"three numbers","equation":"19-19+12=58"},{"id":"L8","tier":"three numbers","equation":"59=16+18-19"},{"id":"S1","tier":"sign swaps","equation":"17-15+10=8"},{"id":"S2","tier":"sign swaps","equation":"23-19+18=14"},{"id":"S3","tier":"sign swaps","equation":"17-19+8=10"},{"id":"S4","tier":"sign swaps","equation":"6-16+9=19"},{"id":"B1","tier":"big numbers","equation":"1961=969+593"},{"id":"B2","tier":"big numbers","equation":"1893=997-696"},{"id":"B3","tier":"big numbers","equation":"1851=598+859"},{"id":"B4","tier":"big numbers","equation":"999+989=1548"},{"id":"B5","tier":"big numbers","equation":"1995=998+391"},{"id":"B6","tier":"big numbers","equation":"1993=995-958"}];
 var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy","equation":"6-7=2"},{"id":"E3","tier":"easy","equation":"0+8=3"},{"id":"E4","tier":"easy","equation":"2-2=9"},{"id":"E5","tier":"easy","equation":"8-0=3"},{"id":"E6","tier":"easy","equation":"0-4=5"},{"id":"E7","tier":"easy","equation":"1+6=5"},{"id":"E8","tier":"easy","equation":"3+9=3"},{"id":"E9","tier":"easy","equation":"6+4=5"},{"id":"E10","tier":"easy","equation":"4-4=6"},{"id":"M1","tier":"medium","equation":"3-2=6"},{"id":"M2","tier":"medium","equation":"9+7=1"},{"id":"M3","tier":"medium","equation":"2-8=6"},{"id":"M4","tier":"medium","equation":"0-8=0"},{"id":"M5","tier":"medium","equation":"7+0=1"},{"id":"M6","tier":"medium","equation":"4-5=8"},{"id":"M7","tier":"medium","equation":"0+2=6"},{"id":"M8","tier":"medium","equation":"7-5=6"},{"id":"M9","tier":"medium","equation":"8+6=0"},{"id":"M10","tier":"medium","equation":"5-4=8"},{"id":"H1","tier":"hard","equation":"3+18=15"},{"id":"H2","tier":"hard","equation":"18-19=29"},{"id":"H3","tier":"hard","equation":"11+6=3"},{"id":"H4","tier":"hard","equation":"3-13=10"},{"id":"H5","tier":"hard","equation":"3+12=17"},{"id":"H6","tier":"hard","equation":"6+13=29"},{"id":"H7","tier":"hard","equation":"3-12=19"},{"id":"H8","tier":"hard","equation":"16+0=8"},{"id":"H9","tier":"hard","equation":"2+15=15"},{"id":"H10","tier":"hard","equation":"2+18=19"}];
-/* Matchstick board on /puzzles/matchstick-puzzles/. Needs matchstick-engine.js (window.MatchEngine) and MS_SET.
+/* Matchstick board on /puzzles/matchstick-puzzles/ (MS_SET) and /puzzles/hardest-matchstick-puzzles/ (MS_HARD,
+   picked with data-set="hard" on #ms). Needs matchstick-engine.js (window.MatchEngine).
    Tap a match to pick it up, then tap an empty spot to put it down. Any true equation counts, not only ours. */
 (function () {
   "use strict";
   var root = document.getElementById("ms");
-  if (!root || !window.MatchEngine || !window.MS_SET) return;
-  var M = window.MatchEngine, SET = window.MS_SET;
+  var hard = root && root.getAttribute("data-set") === "hard";
+  var SET = hard ? window.MS_HARD : window.MS_SET;
+  if (!root || !window.MatchEngine || !SET) return;
+  var M = window.MatchEngine, STORE = hard ? "ms-hard-solved" : "ms-solved";
   var svgWrap = root.querySelector(".ms-board");
   var msg = root.querySelector(".ms-msg");
   var title = root.querySelector(".ms-title");
@@ -15,8 +19,8 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
   var NS = "http://www.w3.org/2000/svg";
   var idx = 0, board, start, cur, lifted = null, history = [], hintLevel = 0, solvedSet = load();
 
-  function load() { try { return JSON.parse(localStorage.getItem("ms-solved") || "{}"); } catch (e) { return {}; } }
-  function store() { try { localStorage.setItem("ms-solved", JSON.stringify(solvedSet)); } catch (e) {} }
+  function load() { try { return JSON.parse(localStorage.getItem(STORE) || "{}"); } catch (e) { return {}; } }
+  function store() { try { localStorage.setItem(STORE, JSON.stringify(solvedSet)); } catch (e) {} }
 
   function geometry(state) {
     var x = 22, out = [], slot = 0;
@@ -59,6 +63,8 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
       if (on) grp.appendChild(el("circle", { cx: s[0], cy: s[1], r: 13 }));
       svg.appendChild(grp);
     });
+    // Long equations scroll sideways on narrow phones instead of shrinking the matches below a tappable size.
+    svg.style.minWidth = Math.round(g.width * 0.16) + "px";
     svgWrap.innerHTML = "";
     svgWrap.appendChild(svg);
   }
@@ -117,7 +123,8 @@ var MS_SET=[{"id":"E1","tier":"easy","equation":"5+7=5"},{"id":"E2","tier":"easy
   }
 
   function fillPicker() {
-    var html = "", tiers = ["easy", "medium", "hard"];
+    var html = "", tiers = [];
+    SET.forEach(function (p) { if (tiers.indexOf(p.tier) < 0) tiers.push(p.tier); });
     tiers.forEach(function (t) {
       html += '<optgroup label="' + t.charAt(0).toUpperCase() + t.slice(1) + '">';
       SET.forEach(function (p) { if (p.tier === t) html += '<option value="' + p.id + '">' + p.id + (solvedSet[p.id] ? " (solved)" : "") + "</option>"; });
