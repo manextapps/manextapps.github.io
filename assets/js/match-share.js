@@ -57,13 +57,13 @@
   function judge() {
     var used = M.used(start, cur);
     if (used === 0) { say("Pick up a match, then tap an empty spot to put it down."); return; }
-    if (used > moves) { say((moves === 1 ? "That's more than one match moved." : "That's more than two matches moved.") + " Tap Undo or Reset.", "is-bad"); return; }
-    if (used < moves) { say("That's one match moved. This puzzle needs two, so move one more."); return; }
+    if (used > moves) { say("That's more than " + COUNT[moves] + " moved. Tap Undo or Reset.", "is-bad"); return; }
+    if (used < moves) { say("That's " + COUNT[used] + " moved. This puzzle needs " + COUNT[moves].split(" ")[0] + ", so keep going."); return; }
     var c = board.canonical(cur);
     if (board.evaluate(c) === 1) {
       solved = true;
       root.classList.add("is-solved");
-      say("Solved: " + pretty(board.text(c)) + " is true. Send it back to your friend from the app, or try the puzzles on this site.", "is-ok");
+      say("Solved. There are 550 more in the app, plus a new daily puzzle every day.", "is-ok");
       draw();
       return;
     }
@@ -88,15 +88,17 @@
     judge();
   }
 
-  window.MatchShare = function (equation, kind) {
+  var COUNT = ["", "one match", "two matches", "three matches", "four matches"];
+  function task() { return "Move exactly " + COUNT[moves] + " to make the equation true."; }
+
+  window.MatchShare = function (equation, action, budget) {
     try { var parsed = M.parse(equation); } catch (e) { return; }
     board = parsed.board; start = parsed.state; cur = start.slice();
-    moves = kind === "M2" ? 2 : 1;
-    playable = kind === "M1" || kind === "M2";
+    moves = budget;
+    playable = action === "M";
     root.hidden = false;
     tools.hidden = !playable;
-    say(playable ? (moves === 2 ? "Move exactly two matches to make the equation true." : "Move exactly one match to make the equation true.")
-      : (kind === "A1" ? "Add one match to make it true." : "Take away one match to make it true.") + " This kind of puzzle plays in the app.");
+    say(playable ? task() : (action === "A" ? "Add " : "Take away ") + COUNT[moves] + " to make it true. This one opens in the app.");
     draw();
   };
 
@@ -112,7 +114,7 @@
   });
   root.querySelector("[data-reset]").addEventListener("click", function () {
     cur = start.slice(); history = []; lifted = null; solved = false; root.classList.remove("is-solved");
-    say(moves === 2 ? "Move exactly two matches to make the equation true." : "Move exactly one match to make the equation true.");
+    say(task());
     draw();
   });
 })();

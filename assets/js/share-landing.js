@@ -22,7 +22,7 @@
   function setButtons(pkg, referrer) {
     var play = playUrl(pkg, referrer);
     playBtn.href = play;
-    if (android) { openBtn.href = intentUrl(pkg, play); openBtn.hidden = false; }
+    if (android && openBtn) { openBtn.href = intentUrl(pkg, play); openBtn.hidden = false; }
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
@@ -79,33 +79,43 @@
 
   var PACKS = { move1: "Move one match", move2: "Move two matches", addremove: "Add or remove", shapes: "Squares and triangles" };
 
+  /* /play/matchstick/, per the app's DESIGN.md 3.2.1: p is <M|A|R><1|2>.<equation in p m e>, id is d<epochDay> or
+     <pack>.<n>. Both are optional; a link can carry only an id. Query text only ever reaches the page as textContent. */
   function matchstick() {
     var p = q.get("p") || "", id = q.get("id") || "", pkg = "com.manextapps.matchstick";
     var okId = /^(d\d{1,6}|(move1|move2|addremove|shapes)\.\d{1,3})$/.test(id) ? id : "";
-    setButtons(pkg, "utm_source=friend_share&utm_medium=share&utm_campaign=matchstick" + (okId ? "&utm_content=" + okId : ""));
-    var what = "a Matchstick Puzzle";
+    setButtons(pkg, "utm_source=friend_share&utm_medium=share&utm_campaign=matchstick&utm_content=" + (okId || "site_play_page"));
+    var label = "", parts = okId.split(".");
     if (/^d\d+$/.test(okId)) {
       var day = new Date(+okId.slice(1) * 86400000);
-      what = "the Matchstick Puzzle daily for " + MONTHS[day.getUTCMonth()] + " " + day.getUTCDate();
+      label = "The daily puzzle for " + MONTHS[day.getUTCMonth()] + " " + day.getUTCDate();
     } else if (okId) {
-      var parts = okId.split(".");
-      what = "level " + (+parts[1]) + " of the " + PACKS[parts[0]] + " pack in Matchstick Puzzle";
+      label = parts[0] === "shapes" ? "Squares and triangles level " + (+parts[1]) : PACKS[parts[0]] + ", level " + (+parts[1]);
     }
-    var m = /^(M1|M2|A1|R1)\.([0-9pme]{3,13})$/.exec(p);
+    var COUNT = ["", "one match", "two matches", "three matches", "four matches"];
+    var m = /^([MAR])([1-4])\.([0-9pme]{3,15})$/.exec(p);
+    var eq = m ? m[3].replace(/p/g, "+").replace(/m/g, "-").replace(/e/g, "=") : "";
+    if (m && eq.split("=").length === 2) {
+      try { window.MatchEngine && window.MatchEngine.parse(eq); } catch (e) { m = null; }
+    } else m = null;
     if (m) {
-      var eq = m[2].replace(/p/g, "+").replace(/m/g, "-").replace(/e/g, "=");
-      var task = { M1: "Move one match", M2: "Move two matches", A1: "Add one match", R1: "Take away one match" }[m[1]];
+      var task = { M: "Move ", A: "Add ", R: "Take away " }[m[1]] + COUNT[+m[2]];
       var shown = eq.replace(/-/g, " \u2212 ").replace(/\+/g, " + ").replace(/=/g, " = ");
-      textEl.textContent = "A friend sent you " + what + ": " + shown + ". " + task + " to make it true.";
-      if (window.MatchShare) window.MatchShare(eq, m[1]);
+      textEl.textContent = (label ? label + ": " : "") + shown + ". " + task + " to make it true.";
+      if (window.MatchShare) window.MatchShare(eq, m[1], +m[2]);
       return;
     }
-    var s = /^(Q|T)\.([0-9x]{1,5})\.(R|A|M)(\d)\.(\d{1,2})\.S\.[0-9a-z]{1,40}$/.exec(p);
-    if (s) {
-      var verb = { R: "Take away", A: "Add", M: "Move" }[s[3]], shape = s[1] === "Q" ? "square" : "triangle", n = +s[5];
-      textEl.textContent = "A friend sent you " + what + ". " + verb + " " + s[4] + " match" + (s[4] === "1" ? "" : "es") +
-        " and leave exactly " + n + " " + shape + (n === 1 ? "" : "s") + ". This kind of puzzle plays in the app.";
+    if (/^(Q\.\d{1,2}x\d{1,2}|T\.\d{1,2})\.[MAR][1-4]\.\d{1,3}\.[SL]\.[0-9a-f]{1,16}$/.test(p)) {
+      textEl.textContent = (parts[0] === "shapes" ? label : "A squares and triangles puzzle") + ". It opens in the Matchstick Puzzle app.";
+      return;
     }
+    if (okId) {
+      textEl.textContent = label + ". It opens in the Matchstick Puzzle app.";
+      return;
+    }
+    var h1 = document.querySelector("h1");
+    if (h1) h1.textContent = "Matchstick puzzles";
+    textEl.textContent = "Every equation is wrong, and moving the right matches makes it true. Play them in the app, or try the puzzles on this site.";
   }
 
   ({ vault: vault, zip: zip, matchstick: matchstick })[kind]();
