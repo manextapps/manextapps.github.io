@@ -1,0 +1,42 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.crackthevault.game",
+      "sha256_cert_fingerprints": [
+        "55:04:1E:5A:8F:1D:0D:D0:F5:7D:4D:8D:2C:65:1E:B9:A7:1A:9B:1B:1D:16:53:55:D3:95:DA:8F:E1:F2:56:76",
+        "B7:3F:A0:7E:5B:7E:EE:AB:96:40:C4:AF:C8:DF:E9:EE:FA:D3:DA:A8:D4:46:C6:28:E8:1B:72:DE:D8:09:C9:87",
+        "FA:A7:4F:85:D7:9D:5C:00:54:D9:63:00:69:9B:4D:5C:AC:FA:6A:CB:AD:44:C8:33:91:DC:74:7D:81:A1:1F:FE",
+        "B5:DB:C5:1E:12:86:95:48:C6:C2:B5:7C:62:BB:E7:95:D0:AF:8F:AB:6B:F6:88:14:79:74:05:F2:A6:5D:17:E2"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.manextapps.matchstick",
+      "sha256_cert_fingerprints": [
+        "6A:DB:FF:23:65:D6:66:7A:17:93:34:6B:49:5B:FD:87:CC:62:D9:CF:A1:65:F0:6E:19:01:F0:C6:D8:07:20:6E",
+        "B5:DB:C5:1E:12:86:95:48:C6:C2:B5:7C:62:BB:E7:95:D0:AF:8F:AB:6B:F6:88:14:79:74:05:F2:A6:5D:17:E2"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.manextapps.zippuzzle",
+      "sha256_cert_fingerprints": [
+        "B5:DB:C5:1E:12:86:95:48:C6:C2:B5:7C:62:BB:E7:95:D0:AF:8F:AB:6B:F6:88:14:79:74:05:F2:A6:5D:17:E2"
+      ]
+    }
+  }
+]
