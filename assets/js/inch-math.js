@@ -18,7 +18,7 @@
   /* A plain number: "3", "3.4375", "3 7/16", "7/16". */
   function number(s) {
     s = s.trim();
-    var m = /^(\d+)?\s*(?:(\d+)\/(\d+))?$/.exec(s);
+    var m = /^(?:(\d+)(?:\s+|$))?(?:(\d+)\/(\d+))?$/.exec(s);
     if (m && (m[1] || m[2])) {
       if (m[3] === "0") return null;
       var whole = frac(B(m[1] || 0), ONE);

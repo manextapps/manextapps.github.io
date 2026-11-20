@@ -102,6 +102,7 @@
       ["Steps to climb", b.risers + " risers", "Each " + len(b.riser) + ", " + M.decimal(b.riser, 3) + "″ exact"],
       ["Treads", String(b.treads), "One fewer than risers. The upper floor is the last step"],
       ["Total run", len(b.run), "Floor space from the bottom riser to the top one"],
+      ["Stringer line", "about " + ftIn(b.stringer), "Straight line from the bottom of the stair to the top, before cuts"],
       ["Angle", b.angle.toFixed(1) + "°", "2 risers + 1 tread = " + M.inches(M.add(M.mul(b.riser, M.of(2)), r.v.tread), 16)],
       ["Stairwell opening", "about " + ftIn(b.opening), "Measured back from the top riser, for " + len(r.v.headroom) + " of headroom"],
     ];

@@ -16,7 +16,7 @@
     head: root.querySelector(".pc-print-head"),
   };
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  var done = {};
+  var done = {}, monthPlan = "";
 
   function store(k, v) {
     try {
@@ -75,10 +75,19 @@
       cur.days.push(d);
       cur.sum += d.pennies;
     });
-    var run = 0;
-    els.months.innerHTML = '<div class="table-wrap"><table class="pc-table"><thead><tr><th>Month</th><th class="num">Days</th><th class="num">Saved that month</th><th class="num">Total so far</th></tr></thead><tbody>' +
-      months.map(function (m) { run += m.sum; return "<tr><td>" + m.name + '</td><td class="num">' + m.days.length + '</td><td class="num">' + money(m.sum) + '</td><td class="num">' + money(run) + "</td></tr>"; }).join("") +
-      "</tbody></table></div>";
+    var run = 0, rowsHtml = months.map(function (m) {
+      run += m.sum;
+      var first = m.days[0], lastDay = m.days[m.days.length - 1], d1 = new Date(first.date).getUTCDate(), d2 = new Date(lastDay.date).getUTCDate();
+      return "<tr><td>" + m.name + '</td><td class="num">' + (d1 === d2 ? d1 : d1 + " to " + d2) + '</td><td class="num">' + m.days.length + '</td><td class="num">' +
+        (first.pennies === lastDay.pennies ? money(first.pennies) : money(first.pennies) + " to " + money(lastDay.pennies)) + '</td><td class="num"><strong>' + money(m.sum) +
+        '</strong></td><td class="num">' + money(run) + "</td>";
+    });
+    var thead = '<thead><tr><th>Month</th><th class="num">Dates</th><th class="num">Days</th><th class="num">Each day</th><th class="num">That month</th><th class="num">Total so far</th>';
+    els.months.innerHTML = '<div class="table-wrap"><table class="pc-table pc-by-month"><caption>Your challenge by month</caption>' + thead + "</tr></thead><tbody>" +
+      rowsHtml.map(function (r) { return r + "</tr>"; }).join("") + "</tbody></table></div>";
+    monthPlan = '<p class="pc-print-head">' + els.head.textContent + '</p><p class="pc-print-sub">Move each month\'s total into savings at the start of the month, then tick it off.</p>' +
+      '<table class="pc-plan">' + thead + '<th>Moved</th></tr></thead><tbody>' + rowsHtml.map(function (r) { return r + '<td><span class="pc-box"></span></td></tr>'; }).join("") +
+      '</tbody></table><p class="pc-print-foot">www.manextapps.com/tools/penny-challenge/</p>';
     els.days.innerHTML = months.map(function (m) {
       return '<section class="pc-month"><h3>' + m.name + " <span>" + money(m.sum) + "</span></h3><ol>" + m.days.map(function (d) {
         var day = new Date(d.date).getUTCDate();
@@ -103,8 +112,9 @@
       if (again) again.focus();
     } else if (b.hasAttribute("data-print")) {
       // Printing shows only the chart: a copy goes into its own container and everything else is hidden.
-      printRoot.innerHTML = root.querySelector(".pc-print").innerHTML;
-      printRoot.className = b.getAttribute("data-print") === "blank" ? "print-blank" : "";
+      var kind = b.getAttribute("data-print");
+      printRoot.innerHTML = kind === "months" ? monthPlan : root.querySelector(".pc-print").innerHTML;
+      printRoot.className = kind === "blank" ? "print-blank" : kind === "months" ? "print-months" : "";
       window.print();
     } else if (b.hasAttribute("data-clear")) {
       if (!Object.keys(done).length || !window.confirm("Clear every ticked day on this chart? This can't be undone.")) return;
