@@ -113,9 +113,9 @@
     out.innerHTML = '<dl class="st-res">' + rows.map(function (x) { return "<div><dt>" + x[0] + "</dt><dd>" + x[1] + "<span>" + x[2] + "</span></dd></div>"; }).join("") + "</dl>";
     var list = [], b = toMm(r.blondel), rise1 = M.num(r.landingH);
     list.push("Two risers plus one tread come to " + Math.round(b) + " mm (" + M.inches(r.blondel, 16) + "). England's Approved Document K asks for 550 to 700 mm.");
-    if (r.n1 > 12) list.push("Flight 1 has " + r.n1 + " risers. India's Model Building Bye Laws 2016 allow 12 risers per flight in a house, so add a second landing or lower the floor height per flight.");
+    if (r.n1 > 12) list.push("Flight 1 has " + r.n1 + " risers. India's Model Building Bye Laws 2016, clause 4.17.4.1, allow 12 risers per flight, so add a second landing or lower the floor height per flight.");
     if (rise1 > 151) list.push("Flight 1 climbs " + impLen(r.landingH) + ", more than the 151″ the IRC allows between landings.");
-    if (toMm(r.landingH) < 2200) list.push("The mid landing sits " + metricLen(r.landingH) + " up, under the 2.2 m of headroom the bylaws ask for in a passage, so nobody can walk under it. The space can still take a cupboard.");
+    if (toMm(r.landingH) < 2200) list.push("The mid landing sits " + metricLen(r.landingH) + " up, under the 2.2 m of headroom that clause 4.17.4.2 of the bylaws asks for in a passage under a landing, so nobody can walk under it. The space can still take a cupboard.");
     notes.innerHTML = "<ul>" + list.map(function (t) { return "<li>" + t + "</li>"; }).join("") + "</ul>";
     draw.innerHTML = svg(r, show);
   }
